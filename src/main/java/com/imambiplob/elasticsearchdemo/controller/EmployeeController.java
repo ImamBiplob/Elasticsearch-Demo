@@ -27,7 +27,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/searchByName/{name}")
-    public List<String> searchByName(@PathVariable String name) throws IOException {
+    public List<EsEmployee> searchByName(@PathVariable String name) throws IOException {
         return employeeService.searchByName(name);
     }
 

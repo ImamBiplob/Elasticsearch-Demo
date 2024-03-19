@@ -1,9 +1,14 @@
 package com.imambiplob.elasticsearchdemo.service;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.query_dsl.MatchPhrasePrefixQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.imambiplob.elasticsearchdemo.entity.EsEmployee;
+import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
+import org.springframework.data.elasticsearch.client.elc.QueryBuilders;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -32,7 +37,7 @@ public class EsEmployeeService {
         esOps.save(employee);
     }
 
-    public List<String> searchEmployeeByName(String name) throws IOException {
+    public List<EsEmployee> searchEmployeeByName(String name) throws IOException {
         SearchResponse<EsEmployee> searchResponse = esClient.search(s -> s
                 .index("employee")
                 .query(q -> q
@@ -42,13 +47,13 @@ public class EsEmployeeService {
 
         List<Hit<EsEmployee>> hits = searchResponse.hits().hits();
 
-        List<String> names = new ArrayList<>();
+        List<EsEmployee> employeeList = new ArrayList<>();
         for (Hit<EsEmployee> hit : hits) {
             if (hit.source() != null)
-                names.add(hit.source().getName());
+                employeeList.add(hit.source());
         }
 
-        return names;
+        return employeeList;
     }
 
     public List<EsEmployee> searchEmployeeWithSalaryBetween(int startingSalary, int endingSalary) {
