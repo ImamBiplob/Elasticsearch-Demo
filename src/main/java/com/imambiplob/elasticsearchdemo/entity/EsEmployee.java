@@ -1,5 +1,6 @@
 package com.imambiplob.elasticsearchdemo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +12,8 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "employee")
+@Document(indexName = "employee", createIndex = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EsEmployee {
 
     @Id
@@ -26,7 +28,7 @@ public class EsEmployee {
     @Field(type = FieldType.Keyword, name = "department")
     private String department;
 
-    @Field(type = FieldType.Integer, name = "name")
+    @Field(type = FieldType.Integer, name = "salary")
     private int salary;
 
 }
