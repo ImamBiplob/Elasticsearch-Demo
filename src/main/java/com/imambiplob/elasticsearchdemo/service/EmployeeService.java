@@ -38,7 +38,7 @@ public class EmployeeService {
         return savedEmployee;
     }
 
-    public List<String> searchByName(String name) throws IOException {
+    public List<EsEmployee> searchByName(String name) throws IOException {
         return esEmployeeService.searchEmployeeByName(name);
     }
 
