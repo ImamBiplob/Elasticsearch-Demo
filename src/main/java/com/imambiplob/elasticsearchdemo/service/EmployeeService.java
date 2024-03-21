@@ -43,6 +43,10 @@ public class EmployeeService {
     }
 
     public List<EsEmployee> searchByName2(String name) {
+        return esEmployeeService.searchEmployeeByName2(name);
+    }
+
+    public List<EsEmployee> searchByName3(String name) {
         return esEmployeeService.searchStringQuery(name);
     }
 

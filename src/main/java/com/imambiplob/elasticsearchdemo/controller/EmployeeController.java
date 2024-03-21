@@ -26,14 +26,19 @@ public class EmployeeController {
         return ResponseEntity.ok(savedEmployee);
     }
 
-    @GetMapping("/searchByName/{name}")
-    public List<EsEmployee> searchByName(@PathVariable String name) throws IOException {
-        return employeeService.searchByName(name);
+    @GetMapping("/searchByName/{keyword}")  // auto suggest employees where keyword is matching with start of any word from employee name (Implemented 'edge_ngram' analyzer)
+    public List<EsEmployee> searchByName(@PathVariable String keyword) throws IOException {
+        return employeeService.searchByName(keyword);
     }
 
-    @GetMapping("/searchByName2/{name}")
-    public List<EsEmployee> searchByName2(@PathVariable String name) {
-        return employeeService.searchByName2(name);
+    @GetMapping("/searchByName2/{keyword}")  // auto suggest employees where keyword is matching with start of any word from employee name (Implemented 'edge_ngram' analyzer)
+    public List<EsEmployee> searchByName2(@PathVariable String keyword) {
+        return employeeService.searchByName2(keyword);
+    }
+
+    @GetMapping("/searchByName3/{keyword}")  // auto suggest employees where keyword is matching with start of any word from employee name (Implemented 'edge_ngram' analyzer)
+    public List<EsEmployee> searchByName3(@PathVariable String keyword) {
+        return employeeService.searchByName3(keyword);
     }
 
     @GetMapping("searchBySalary/{startingSalary}/{endingSalary}")
