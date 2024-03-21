@@ -8,18 +8,20 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.Setting;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "employee", createIndex = true)
+@Document(indexName = "employee")
+@Setting(settingPath = "/es-config/elastic-analyzer.json")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EsEmployee {
 
     @Id
     private long id;
 
-    @Field(type = FieldType.Text, name = "name")
+    @Field(type = FieldType.Text, name = "name", analyzer = "autocomplete_index", searchAnalyzer = "autocomplete_search")
     private String name;
 
     @Field(type = FieldType.Integer, name = "age")

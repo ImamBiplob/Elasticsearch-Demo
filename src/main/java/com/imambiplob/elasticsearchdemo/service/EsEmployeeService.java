@@ -1,14 +1,11 @@
 package com.imambiplob.elasticsearchdemo.service;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch._types.query_dsl.MatchPhrasePrefixQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.imambiplob.elasticsearchdemo.entity.EsEmployee;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
-import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
-import org.springframework.data.elasticsearch.client.elc.QueryBuilders;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -54,6 +51,14 @@ public class EsEmployeeService {
         }
 
         return employeeList;
+    }
+
+    public List<EsEmployee> searchEmployeeByName2(String name) {
+        co.elastic.clients.elasticsearch._types.query_dsl.Query query = MatchQuery.of(m -> m.field("name").query(name))._toQuery();
+        NativeQuery nativeQuery = NativeQuery.builder().withQuery(query).build();
+        SearchHits<EsEmployee> result = esOps.search(nativeQuery, EsEmployee.class);
+
+        return result.stream().map(SearchHit::getContent).toList();
     }
 
     public List<EsEmployee> searchEmployeeWithSalaryBetween(int startingSalary, int endingSalary) {
