@@ -4,6 +4,8 @@ import com.imambiplob.elasticsearchdemo.entity.Employee;
 import com.imambiplob.elasticsearchdemo.entity.EsEmployee;
 import com.imambiplob.elasticsearchdemo.repository.EmployeeRepository;
 import com.imambiplob.elasticsearchdemo.repository.EsEmployeeRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -38,6 +40,25 @@ public class EmployeeService {
         return savedEmployee;
     }
 
+    @Cacheable(cacheNames = { "employee-cache" })
+    public List<Employee> getEmployees() {
+        System.out.println("All from DB");
+        return employeeRepository.findAll();
+    }
+
+    @Cacheable(value = "employee-cache", key = "#employeeId", unless = "#result == null")
+    public Employee getEmployee(long employeeId) {
+        System.out.println("From DB");
+        return employeeRepository.findById(employeeId).orElse(null);
+    }
+
+    @CacheEvict(cacheNames = { "employee-cache" })
+    public String deleteEmployee(long employeeId) {
+        employeeRepository.deleteById(employeeId);
+
+        return "Employee deleted of Id " + employeeId;
+    }
+
     public List<EsEmployee> searchByName(String name) throws IOException {
         return esEmployeeService.searchEmployeeByName(name);
     }
@@ -57,5 +78,4 @@ public class EmployeeService {
     public List<EsEmployee> searchByAge(int from, int to) {
         return esEmployeeRepository.findByAgeBetween(from, to);
     }
-
 }
