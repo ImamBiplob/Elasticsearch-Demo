@@ -26,6 +26,21 @@ public class EmployeeController {
         return ResponseEntity.ok(savedEmployee);
     }
 
+    @GetMapping
+    public List<Employee> getEmployees() {
+        return employeeService.getEmployees();
+    }
+
+    @GetMapping("/{employeeId}")
+    public Employee getEmployee(@PathVariable long employeeId) {
+        return employeeService.getEmployee(employeeId);
+    }
+
+    @DeleteMapping("/{employeeId}")
+    public String deleteEmployee(@PathVariable long employeeId) {
+        return employeeService.deleteEmployee(employeeId);
+    }
+
     @GetMapping("/searchByName/{keyword}")  // auto suggest employees where keyword is matching with start of any word from employee name (Implemented 'edge_ngram' analyzer)
     public List<EsEmployee> searchByName(@PathVariable String keyword) throws IOException {
         return employeeService.searchByName(keyword);
