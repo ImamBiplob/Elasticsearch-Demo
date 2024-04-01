@@ -52,7 +52,7 @@ public class EmployeeService {
         return employeeRepository.findById(employeeId).orElse(null);
     }
 
-    @CacheEvict(cacheNames = { "employee-cache" })
+    @CacheEvict(cacheNames = { "employee-cache" }, allEntries = true)
     public String deleteEmployee(long employeeId) {
         employeeRepository.deleteById(employeeId);
 
